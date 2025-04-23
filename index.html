@@ -520,9 +520,7 @@
     </div>
     
     <div class="toast" id="toast">Copied to clipboard!</div>
-  // Add this script right before the closing </body> tag
-
-<script>
+    <script>
     // DOM Elements
     const form = document.getElementById('itabsForm');
     const previewButton = document.getElementById('previewButton');
@@ -819,8 +817,6 @@
     
     @keyframes fadeIn {
         from { opacity: 0; }
-        @keyframes fadeIn {
-        from { opacity: 0; }
         to { opacity: 1; }
     }
     
@@ -874,8 +870,7 @@
         // Update code preview
         generatedCodeElement.textContent = code;
         
-        // Create shareable link (in a real implementation, this would likely involve a server-side component)
-        // For this demo, we'll just encode the data in the URL
+        // Create shareable link
         const params = new URLSearchParams();
         params.append('name', startupNameInput.value);
         params.append('concept', coreConceptInput.value);
