@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iTabs Startup Demo Creator</title>
+    <style>
+        /* Base styles */
+        :root {
+            --primary-color: #0066cc;
+            --secondary-color: #e9f0f8;
+            --border-color: #dcdfe4;
+            --text-color: #333333;
+            --success-color: #28a745;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: #f5f7fa;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        
+        .intro {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 20px;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        /* Form styles */
+        .form-section {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 15px;
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .feature-group {
+            background-color: var(--secondary-color);
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+        
+        .feature-group h3 {
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: var(--primary-color);
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        button {
+            padding: 10px 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        
+        button:hover {
+            background-color: #0052a3;
+        }
+        
+        .secondary-button {
+            background-color: #f8f9fa;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+        
+        .secondary-button:hover {
+            background-color: #e9ecef;
+        }
+        
+        /* Preview styles */
+        .preview-section {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .preview-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        
+        /* iTabs Preview Component */
+        .itabs-preview {
+            border: 2px solid var(--primary-color);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .itabs-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .itabs-logo {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-right: 15px;
+            background-color: white;
+            padding: 3px;
+        }
+        
+        .itabs-title {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        /* Updated tab styles for single line */
+        .itabs-tabs {
+            display: flex;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            flex-wrap: nowrap; /* Ensure no wrapping */
+        }
+        
+        .itabs-tab {
+            padding: 12px 5px; /* Reduced horizontal padding */
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            flex: 1; /* Equal width for all tabs */
+            text-align: center;
+            color: #495057;
+            transition: all 0.2s;
+            white-space: nowrap; /* Prevent text wrapping */
+            overflow: hidden;
+            text-overflow: ellipsis; /* Show ellipsis for overflowing text */
+        }
+        
+        .itabs-tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+            background-color: white;
+        }
+        
+        .itabs-content {
+            padding: 20px;
+            min-height: 200px;
+        }
+        
+        .itabs-tab-content {
+            display: none;
+        }
+        
+        .itabs-tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .itabs-cta {
+            text-align: center;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .itabs-cta-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        
+        .itabs-cta-button:hover {
+            background-color: #0052a3;
+        }
+        
+        /* Code Output Section */
+        .code-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .code-header h2 {
+            font-size: 18px;
+            color: var(--primary-color);
+            margin: 0;
+        }
+        
+        .code-content {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            margin-bottom: 15px;
+        }
+        
+        .copy-button {
+            padding: 8px 15px;
+            background-color: var(--success-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        
+        .copy-button:hover {
+            background-color: #218838;
+        }
+        
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--success-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+        }
+        
+        .toast.show {
+            opacity: 1;
+        }
+        
+        /* Shareable Link Section */
+        .share-section {
+            margin-top: 15px;
+        }
+        
+        .share-title {
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+        
+        .share-url {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .share-url input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 14px;
+            background-color: #f8f9fa;
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            .itabs-tab {
+                padding: 12px 3px; /* Even smaller padding on mobile */
+                font-size: 13px; /* Slightly smaller font on mobile */
+            }
+        }
+        
+        /* Only for extremely small screens, allow wrapping as last resort */
+        @media (max-width: 350px) {
+            .itabs-tabs {
+                flex-wrap: wrap;
+            }
+            
+            .itabs-tab {
+                flex-basis: 50%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>iTabs Startup Demo Creator</h1>
+        <p class="intro">Quickly create a professional iTabs demo to showcase your startup concept. Fill out the form below and get a shareable demo that explains your idea in a clear, engaging way.</p>
+        
+        <div class="main-content">
+            <section class="form-section">
+                <h2>Create Your iTabs</h2>
+                <form id="itabsForm">
+                    <div class="form-group">
+                        <label for="startupName">Startup Name</label>
+                        <input type="text" id="startupName" placeholder="e.g., iTabs" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="coreConcept">Core Concept (1-2 sentences)</label>
+                        <textarea id="coreConcept" placeholder="Briefly describe what your startup does" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="logoUrl">Logo URL (optional)</label>
+                        <input type="url" id="logoUrl" placeholder="https://example.com/logo.png">
+                    </div>
+                    
+                    <div class="feature-group">
+                        <h3>Feature 1</h3>
+                        <div class="form-group">
+                            <label for="feature1Title">Title</label>
+                            <input type="text" id="feature1Title" placeholder="e.g., Easy Integration" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="feature1Description">Description</label>
+                            <textarea id="feature1Description" placeholder="Describe this feature and its benefits" required></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-group">
+                        <h3>Feature 2</h3>
+                        <div class="form-group">
+                            <label for="feature2Title">Title</label>
+                            <input type="text" id="feature2Title" placeholder="e.g., Analytics Dashboard" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="feature2Description">Description</label>
+                            <textarea id="feature2Description" placeholder="Describe this feature and its benefits" required></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-group">
+                        <h3>Feature 3</h3>
+                        <div class="form-group">
+                            <label for="feature3Title">Title</label>
+                            <input type="text" id="feature3Title" placeholder="e.g., Mobile Optimization" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="feature3Description">Description</label>
+                            <textarea id="feature3Description" placeholder="Describe this feature and its benefits" required></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ctaText">Call to Action Text</label>
+                        <input type="text" id="ctaText" placeholder="e.g., Learn More" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ctaUrl">Call to Action URL</label>
+                        <input type="url" id="ctaUrl" placeholder="https://yourstartup.com" required>
+                    </div>
+                    
+                    <div class="buttons">
+                        <button type="button" id="previewButton">Generate Preview</button>
+                        <button type="button" class="secondary-button" id="loadExampleButton">Load Example</button>
+                        <button type="reset" class="secondary-button">Clear Form</button>
+                    </div>
+                </form>
+            </section>
+            
+            <section class="preview-section">
+                <h2 class="preview-title">Preview</h2>
+                <div id="itabsPreview" class="itabs-preview">
+                    <div class="itabs-header">
+                        <img src="https://via.placeholder.com/60" alt="Startup Logo" class="itabs-logo" id="previewLogo">
+                        <h2 class="itabs-title" id="previewTitle">Your Startup Name</h2>
+                    </div>
+                    
+                    <div class="itabs-tabs">
+                        <button class="itabs-tab active" data-tab="concept">Concept</button>
+                        <button class="itabs-tab" data-tab="feature1">Feature 1</button>
+                        <button class="itabs-tab" data-tab="feature2">Feature 2</button>
+                        <button class="itabs-tab" data-tab="feature3">Feature 3</button>
+                    </div>
+                    
+                    <div class="itabs-content">
+                        <div class="itabs-tab-content active" id="concept-content">
+                            <p>Your startup's core concept will appear here. Fill out the form and click "Generate Preview" to see how your iTabs will look.</p>
+                        </div>
+                        
+                        <div class="itabs-tab-content" id="feature1-content">
+                            <h3>Feature 1 Title</h3>
+                            <p>Feature 1 description will appear here.</p>
+                        </div>
+                        
+                        <div class="itabs-tab-content" id="feature2-content">
+                            <h3>Feature 2 Title</h3>
+                            <p>Feature 2 description will appear here.</p>
+                        </div>
+                        
+                        <div class="itabs-tab-content" id="feature3-content">
+                            <h3>Feature 3 Title</h3>
+                            <p>Feature 3 description will appear here.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="itabs-cta">
+                        <a href="#" class="itabs-cta-button" id="previewCta">Learn More</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <!-- Generated Code Section -->
+        <section class="code-section" id="codeSection">
+            <div class="code-header">
+                <h2>Generated Code</h2>
+                <button id="copyCodeButton" class="copy-button">Copy Code</button>
+            </div>
+            <div class="code-content" id="generatedCode">
+                <!-- Generated code will appear here -->
+                <span class="placeholder">Your code will appear here after you generate a preview.</span>
+            </div>
+            
+            <div class="share-section">
+                <h3 class="share-title">Shareable Link</h3>
+                <div class="share-url">
+                    <input type="text" id="shareableLink" readonly>
+                    <button id="copyLinkButton" class="copy-button">Copy Link</button>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <div class="toast" id="toast">Copied to clipboard!</div>
+  // Add this script right before the closing </body> tag
+
+<script>
+    // DOM Elements
+    const form = document.getElementById('itabsForm');
+    const previewButton = document.getElementById('previewButton');
+    const loadExampleButton = document.getElementById('loadExampleButton');
+    const copyCodeButton = document.getElementById('copyCodeButton');
+    const copyLinkButton = document.getElementById('copyLinkButton');
+    const codeSection = document.getElementById('codeSection');
+    const toast = document.getElementById('toast');
+    
+    // iTabs Preview Elements
+    const previewLogo = document.getElementById('previewLogo');
+    const previewTitle = document.getElementById('previewTitle');
+    const previewCta = document.getElementById('previewCta');
+    const conceptContent = document.getElementById('concept-content');
+    const feature1Content = document.getElementById('feature1-content');
+    const feature2Content = document.getElementById('feature2-content');
+    const feature3Content = document.getElementById('feature3-content');
+    
+    // Form Inputs
+    const startupNameInput = document.getElementById('startupName');
+    const coreConceptInput = document.getElementById('coreConcept');
+    const logoUrlInput = document.getElementById('logoUrl');
+    const feature1TitleInput = document.getElementById('feature1Title');
+    const feature1DescriptionInput = document.getElementById('feature1Description');
+    const feature2TitleInput = document.getElementById('feature2Title');
+    const feature2DescriptionInput = document.getElementById('feature2Description');
+    const feature3TitleInput = document.getElementById('feature3Title');
+    const feature3DescriptionInput = document.getElementById('feature3Description');
+    const ctaTextInput = document.getElementById('ctaText');
+    const ctaUrlInput = document.getElementById('ctaUrl');
+    
+    // Code Generation Elements
+    const generatedCodeElement = document.getElementById('generatedCode');
+    const shareableLinkInput = document.getElementById('shareableLink');
+    
+    // Tab Switching Functionality
+    document.querySelectorAll('.itabs-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            // Remove active class from all tabs
+            document.querySelectorAll('.itabs-tab').forEach(t => {
+                t.classList.remove('active');
+            });
+            
+            // Remove active class from all tab contents
+            document.querySelectorAll('.itabs-tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Add active class to clicked tab
+            this.classList.add('active');
+            
+            // Add active class to corresponding content
+            const tabName = this.getAttribute('data-tab');
+            document.getElementById(`${tabName}-content`).classList.add('active');
+        });
+    });
+    
+    // Generate Preview
+    previewButton.addEventListener('click', function() {
+        // Validate form
+        if (!form.checkValidity()) {
+            alert('Please fill out all required fields');
+            return;
+        }
+        
+        // Update preview
+        updatePreview();
+        
+        // Generate and show code
+        generateCode();
+        
+        // Scroll to code section
+        codeSection.scrollIntoView({ behavior: 'smooth' });
+    });
+    
+    // Update Preview Function
+    function updatePreview() {
+        // Update logo if provided
+        if (logoUrlInput.value) {
+            previewLogo.src = logoUrlInput.value;
+            previewLogo.onerror = function() {
+                // If image fails to load, use placeholder
+                this.src = 'https://via.placeholder.com/60';
+            };
+        } else {
+            previewLogo.src = 'https://via.placeholder.com/60';
+        }
+        
+        // Update startup name
+        previewTitle.textContent = startupNameInput.value;
+        
+        // Update concept content
+        conceptContent.innerHTML = `<p>${coreConceptInput.value}</p>`;
+        
+        // Update feature contents
+        feature1Content.innerHTML = `
+            <h3>${feature1TitleInput.value}</h3>
+            <p>${feature1DescriptionInput.value}</p>
+        `;
+        
+        feature2Content.innerHTML = `
+            <h3>${feature2TitleInput.value}</h3>
+            <p>${feature2DescriptionInput.value}</p>
+        `;
+        
+        feature3Content.innerHTML = `
+            <h3>${feature3TitleInput.value}</h3>
+            <p>${feature3DescriptionInput.value}</p>
+        `;
+        
+        // Update CTA button
+        previewCta.textContent = ctaTextInput.value;
+        previewCta.href = ctaUrlInput.value;
+        
+        // Update tab buttons
+        document.querySelectorAll('.itabs-tab')[1].textContent = feature1TitleInput.value;
+        document.querySelectorAll('.itabs-tab')[2].textContent = feature2TitleInput.value;
+        document.querySelectorAll('.itabs-tab')[3].textContent = feature3TitleInput.value;
+    }
+    
+    // Load Example Data - Updated with iTabs-specific content
+    loadExampleButton.addEventListener('click', function() {
+        // Populate form with iTabs-specific example data
+        startupNameInput.value = 'iTabs';
+        coreConceptInput.value = 'iTabs transforms how users interact with information online through interactive displays that maintain context while delivering rich, visual content without disrupting the user experience.';
+        logoUrlInput.value = 'https://via.placeholder.com/60/0066cc/ffffff?text=i';
+        
+        feature1TitleInput.value = 'Enhanced Hyperlinks';
+        feature1DescriptionInput.value = 'Add a subtle "i" indicator to any link or text that reveals detailed information without forcing users to leave the page. Perfect for affiliate marketing, educational content, and technical documentation.';
+        
+        feature2TitleInput.value = '👍i Reactions';
+        feature2DescriptionInput.value = 'Transform standard emoji reactions into gateways for meaningful engagement. The 👍i system combines familiar reactions with information displays, creating deeper connections with content.';
+        
+        feature3TitleInput.value = 'Content Teasers';
+        feature3DescriptionInput.value = 'Create engaging previews of complex information through tabbed interfaces that organize content into digestible sections. Perfect for product information, job listings, and educational materials.';
+        
+        ctaTextInput.value = 'Transform Your Content';
+        ctaUrlInput.value = 'https://itabs.example.com';
+        
+        // Update preview with example data
+        updatePreview();
+    });
+    
+    // Generate HTML Code
+    function generateCode() {
+        const uniqueId = 'itabs-' + Math.random().toString(36).substring(2, 10);
+        
+        const code = `<!-- iTabs Demo - Begin -->
+<div class="itabs-container" id="${uniqueId}">
+    <div class="itabs-preview">
+        <div class="itabs-header">
+            <img src="${logoUrlInput.value || 'https://via.placeholder.com/60'}" alt="${startupNameInput.value} Logo" class="itabs-logo">
+            <h2 class="itabs-title">${startupNameInput.value}</h2>
+        </div>
+        
+        <div class="itabs-tabs">
+            <button class="itabs-tab active" data-tab="concept">Concept</button>
+            <button class="itabs-tab" data-tab="feature1">${feature1TitleInput.value}</button>
+            <button class="itabs-tab" data-tab="feature2">${feature2TitleInput.value}</button>
+            <button class="itabs-tab" data-tab="feature3">${feature3TitleInput.value}</button>
+        </div>
+        
+        <div class="itabs-content">
+            <div class="itabs-tab-content active" id="concept-content">
+                <p>${coreConceptInput.value}</p>
+            </div>
+            
+            <div class="itabs-tab-content" id="feature1-content">
+                <h3>${feature1TitleInput.value}</h3>
+                <p>${feature1DescriptionInput.value}</p>
+            </div>
+            
+            <div class="itabs-tab-content" id="feature2-content">
+                <h3>${feature2TitleInput.value}</h3>
+                <p>${feature2DescriptionInput.value}</p>
+            </div>
+            
+            <div class="itabs-tab-content" id="feature3-content">
+                <h3>${feature3TitleInput.value}</h3>
+                <p>${feature3DescriptionInput.value}</p>
+            </div>
+        </div>
+        
+        <div class="itabs-cta">
+            <a href="${ctaUrlInput.value}" class="itabs-cta-button" target="_blank">${ctaTextInput.value}</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* iTabs Styles */
+    .itabs-container {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        max-width: 600px;
+        margin: 20px auto;
+    }
+    
+    .itabs-preview {
+        border: 2px solid #0066cc;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .itabs-header {
+        background-color: #0066cc;
+        color: white;
+        padding: 15px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .itabs-logo {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 50%;
+        margin-right: 15px;
+        background-color: white;
+        padding: 3px;
+    }
+    
+    .itabs-title {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 600;
+    }
+    
+    .itabs-tabs {
+        display: flex;
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+        flex-wrap: nowrap;
+    }
+    
+    .itabs-tab {
+        padding: 12px 5px;
+        background: none;
+        border: none;
+        border-bottom: 3px solid transparent;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        flex: 1;
+        text-align: center;
+        color: #495057;
+        transition: all 0.2s;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .itabs-tab.active {
+        color: #0066cc;
+        border-bottom-color: #0066cc;
+        background-color: white;
+    }
+    
+    .itabs-content {
+        padding: 20px;
+        min-height: 200px;
+    }
+    
+    .itabs-tab-content {
+        display: none;
+    }
+    
+    .itabs-tab-content.active {
+        display: block;
+        animation: fadeIn 0.3s ease;
+    }
+    
+    .itabs-cta {
+        text-align: center;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-top: 1px solid #e9ecef;
+    }
+    
+    .itabs-cta-button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #0066cc;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: 500;
+        transition: background-color 0.2s;
+    }
+    
+    .itabs-cta-button:hover {
+        background-color: #0052a3;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    @media (max-width: 768px) {
+        .itabs-tabs {
+            flex-wrap: nowrap;
+        }
+        
+        .itabs-tab {
+            padding: 12px 3px;
+            font-size: 13px;
+        }
+    }
+    
+    @media (max-width: 350px) {
+        .itabs-tabs {
+            flex-wrap: wrap;
+        }
+        
+        .itabs-tab {
+            flex-basis: 50%;
+        }
+    }
+</style>
+
+<script>
+    // iTabs Functionality
+    document.querySelectorAll('#${uniqueId} .itabs-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            // Remove active class from all tabs
+            document.querySelectorAll('#${uniqueId} .itabs-tab').forEach(t => {
+                t.classList.remove('active');
+            });
+            
+            // Remove active class from all tab contents
+            document.querySelectorAll('#${uniqueId} .itabs-tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Add active class to clicked tab
+            this.classList.add('active');
+            
+            // Add active class to corresponding content
+            const tabName = this.getAttribute('data-tab');
+            document.querySelector('#${uniqueId} #' + tabName + '-content').classList.add('active');
+        });
+    });
+</script>
+<!-- iTabs Demo - End -->`;
+        
+        // Update code preview
+        generatedCodeElement.textContent = code;
+        
+        // Create shareable link (in a real implementation, this would likely involve a server-side component)
+        // For this demo, we'll just encode the data in the URL
+        const params = new URLSearchParams();
+        params.append('name', startupNameInput.value);
+        params.append('concept', coreConceptInput.value);
+        params.append('logo', logoUrlInput.value);
+        params.append('f1title', feature1TitleInput.value);
+        params.append('f1desc', feature1DescriptionInput.value);
+        params.append('f2title', feature2TitleInput.value);
+        params.append('f2desc', feature2DescriptionInput.value);
+        params.append('f3title', feature3TitleInput.value);
+        params.append('f3desc', feature3DescriptionInput.value);
+        params.append('ctatext', ctaTextInput.value);
+        params.append('ctaurl', ctaUrlInput.value);
+        
+        const shareableLink = `${window.location.origin}${window.location.pathname}?view=1&${params.toString()}`;
+        shareableLinkInput.value = shareableLink;
+    }
+    
+    // Copy Code Button
+    copyCodeButton.addEventListener('click', function() {
+        navigator.clipboard.writeText(generatedCodeElement.textContent)
+            .then(() => {
+                showToast('Code copied to clipboard!');
+            })
+            .catch(err => {
+                console.error('Could not copy text: ', err);
+                alert('Failed to copy code. Please select and copy manually.');
+            });
+    });
+    
+    // Copy Link Button
+    copyLinkButton.addEventListener('click', function() {
+        navigator.clipboard.writeText(shareableLinkInput.value)
+            .then(() => {
+                showToast('Link copied to clipboard!');
+            })
+            .catch(err => {
+                console.error('Could not copy text: ', err);
+                alert('Failed to copy link. Please select and copy manually.');
+            });
+    });
+    
+    // Toast Notification
+    function showToast(message) {
+        toast.textContent = message;
+        toast.classList.add('show');
+        
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+    }
+    
+    // Handle Shareable Link View
+    function handleShareableLink() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const isViewMode = urlParams.get('view') === '1';
+        
+        if (isViewMode) {
+            // Hide form and show only preview
+            document.querySelector('.form-section').style.display = 'none';
+            document.querySelector('.preview-section').style.width = '100%';
+            document.querySelector('.preview-title').textContent = 'Startup Demo';
+            
+            // Fill preview with URL parameters
+            startupNameInput.value = urlParams.get('name') || 'Demo Startup';
+            coreConceptInput.value = urlParams.get('concept') || 'No concept provided';
+            logoUrlInput.value = urlParams.get('logo') || '';
+            feature1TitleInput.value = urlParams.get('f1title') || 'Feature 1';
+            feature1DescriptionInput.value = urlParams.get('f1desc') || 'No description provided';
+            feature2TitleInput.value = urlParams.get('f2title') || 'Feature 2';
+            feature2DescriptionInput.value = urlParams.get('f2desc') || 'No description provided';
+            feature3TitleInput.value = urlParams.get('f3title') || 'Feature 3';
+            feature3DescriptionInput.value = urlParams.get('f3desc') || 'No description provided';
+            ctaTextInput.value = urlParams.get('ctatext') || 'Learn More';
+            ctaUrlInput.value = urlParams.get('ctaurl') || '#';
+            
+            // Update preview
+            updatePreview();
+            
+            // Hide code section
+            codeSection.style.display = 'none';
+            
+            // Add back button
+            const backButton = document.createElement('button');
+            backButton.className = 'secondary-button';
+            backButton.textContent = 'Create Your Own';
+            backButton.style.marginTop = '20px';
+            backButton.onclick = function() {
+                window.location.href = window.location.pathname;
+            };
+            document.querySelector('.preview-section').appendChild(backButton);
+        }
+    }
+    
+    // Initialize view mode if applicable
+    window.addEventListener('DOMContentLoaded', handleShareableLink);
+</script>
+</body>
+</html>
